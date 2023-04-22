@@ -34,4 +34,27 @@ router.post("/login", (req, res) => {
   logIn(req.body.email, req.body.password);
 });
 
+router.post("/newZone", auth, (req, res) => {
+  if (!req.body.name || !req.body.center || !req.body.radius || !req.body.adminName || !req.body.email || !req.body.password) {
+      return res.status(400).json({ message: "Not all fields have been filled" });
+  }
+  const newZone = new zoneModel({
+      name: req.body.name,
+      center: req.body.center,
+      radius: req.body.radius,
+      adminName: req.body.adminName,
+      email: req.body.email,
+      password: req.body.password
+  })
+  try {
+      newZone.save().then((zone) => {
+          res.status(200).json(zone);
+      })
+
+
+  } catch (error) {
+      res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = router;

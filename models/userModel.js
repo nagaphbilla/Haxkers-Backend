@@ -11,19 +11,7 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
-  center : {
-    type : {},
-    required : true,
-  },
-  radius : {
-    type : Number,
-    required : true,
-  },
-  role : {
-    type : String,
-    required : true,
-  },
+  }
 },
   {timestamps : true}
 )

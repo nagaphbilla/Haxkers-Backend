@@ -28,18 +28,16 @@ router.post("/newReport", auth, (req, res) => {
 
 
 //getting all reports of a user
-router.get("/unireport", auth, (req, res) => {
-    const id = req.body.id;
+router.get("/uniReport", auth, (req, res) => {
+    const id = req.body._id;
     try {
-        reportModel.find({ userid: id }).then((data) => {
+        reportModel.find({ _id : id }).then((data) => {
             res.status(200).json(data);
         });
     } catch (error) {
 
         res.status(400).json({ message: error.message });
     }
-
-
 });
 
 //getting all reports
