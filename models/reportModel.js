@@ -4,7 +4,8 @@ const { ObjectId } = mongoose.Schema.Types;
 const ReportSchema = new mongoose.Schema({
     userid: {
         type: ObjectId,
-        ref : "User"
+        ref : "User",
+        required : true
     },
     location: {
         type: {},
@@ -16,11 +17,12 @@ const ReportSchema = new mongoose.Schema({
     },
     cat: {
         type: String,
-        require: true,
+        required: true,
     },
     curstatus:{
         type : String,
-        require: true,
+        default : "Pending",
+        required: true,
     }
 
 })
