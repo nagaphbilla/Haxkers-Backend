@@ -5,15 +5,15 @@ const auth = require("../middleware/auth")
 
 //posting a report
 router.post("/newReport", auth, (req, res) => {
-    if (!req.body.userid || !req.body.location || !req.body.picurl || !req.body.cat) {
+    if (!req.body.userid || !req.body.location || !req.body.reporturl || !req.body.cat) {
         return res.status(400).json({ message: "Not all fields have been filled" });
     }
     const newReport = new reportModel({
         userid: req.body.userid,
         location: req.body.location,
-        picurl: req.body.picurl,
+        reporturl: req.body.reporturl,
         cat: req.body.cat,
-        curstatus: req.body.curstatus
+        status: req.body.status
     })
     try {
         newReport.save().then((report) => {
@@ -57,6 +57,7 @@ router.get("/allreport", auth, (req, res) => {
 
 
 });
+
 function isInCircle(lat1, lon1, lat2, lon2, radius) {
     const R = 6371; // Earth's radius in kilometers
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -73,29 +74,41 @@ function isInCircle(lat1, lon1, lat2, lon2, radius) {
 }
 
 //verifying whether given point is in the circle or not
-router.post("/check",auth, (req, res) => {
-    const lat1 = req.body.lat1;
-    const lon1 = req.body.lon1;
-    const lat2 = req.body.lat2;
-    const lon2 = req.body.lon2;
-    const radius = req.body.radius;
-    try {
-        if (isInCircle(lat1, lon1, lat2, lon2, radius)) {
-            const b=1;
-            res.status(200).json({b});
-
-        }
-        else {
-             const b=0;
-            res.status(200).json({b});
-        }
-    }catch(error)
-    {
-
-           res.status(400).json({message:error.message});
-
+router.post("/zonalReports", auth, (req, res) => {
+    if(!req.body.location || !req.body.category || !req.body.radius) {
+        return res.status(400).json({ message: "Not all fields have been filled" })
     }
+    const lat = req.body.location.lat
+    const long = req.body.location.long
+    const category = req.body.category
+    var matchedReports = []
+    reportModel.find({ cat : category })
+    .then((reports) => {
+        reports.map((report) => {
+            const location = report.location
+            if(isInCircle(lat, long, location["lat"], location["long"], req.body.radius)) {
+                matchedReports.push(report)
+            }
+        })
+    })
+    res.status(200).json(matchedReports)
+})
 
-});
+router.post("/markReports", auth, (req, res) => {
+    const reports = req.body.data
+    Promise.all(reports.map(async report => {
+        var updateDetails = {}
+        if(report.responseurl) {
+            updateDetails["responseurl"] = report.responseurl
+        }
+        if(report.status) {
+            updateDetails["status"] = report.status
+        }
+        return await reportModel.updateOne({ _id : report._id }, updateDetails)
+    }))
+    .then(() => {
+        res.status(200).send("Updated Succesfully")
+    })
+})
 
 module.exports = router;

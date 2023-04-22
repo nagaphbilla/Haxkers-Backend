@@ -11,21 +11,26 @@ const ReportSchema = new mongoose.Schema({
         type: {},
         required: true,
     },
-    picurl: {
+    reporturl: {
         type: String,
         required: true,
+    },
+    responseurl: {
+        type: String,
+        default : null
     },
     cat: {
         type: String,
         required: true,
     },
-    curstatus:{
+    status:{
         type : String,
         default : "Pending",
         required: true,
-    }
-
-})
+    },
+},
+    {timestamps : true}
+)
 
 
 module.exports = mongoose.model('Reports',ReportSchema);
