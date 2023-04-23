@@ -74,14 +74,17 @@ function isInCircle(lat1, lon1, lat2, lon2, radius) {
 
 //verifying whether given point is in the circle or not
 router.post("/zonalReports", auth, (req, res) => {
-    if(!req.body.location || !req.body.category || !req.body.radius) {
+    if(!req.body.location || !req.body.radius) {
         return res.status(400).json({ message: "Not all fields have been filled" })
     }
     const lat = req.body.location.lat
     const long = req.body.location.long
-    const category = req.body.category
+    var filter = {}
+    if(req.body.category) {
+        filter["cat"] = req.body.category
+    }
     var matchedReports = []
-    reportModel.find({ cat : category })
+    reportModel.find(filter)
     .then((reports) => {
         reports.map((report) => {
             const location = report.location
