@@ -31,7 +31,7 @@ router.post("/newReport", auth, (req, res) => {
 router.post("/uniReport", auth, (req, res) => {
     const id = req.body._id;
     try {
-        reportModel.find({ _id : id }).then((data) => {
+        reportModel.find({ userid : id }).then((data) => {
             res.status(200).json(data);
         });
     } catch (error) {
