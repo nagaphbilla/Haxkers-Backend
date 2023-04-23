@@ -89,7 +89,7 @@ router.post("/zonalReports", auth, (req, res) => {
             }
         })
     })
-    res.status(200).json(matchedReports)
+    .then(() => {res.status(200).json(matchedReports)})
 })
 
 router.post("/markReports", auth, (req, res) => {
