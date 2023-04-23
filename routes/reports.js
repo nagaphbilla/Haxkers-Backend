@@ -13,7 +13,8 @@ router.post("/newReport", auth, (req, res) => {
         location: req.body.location,
         reporturl: req.body.reporturl,
         cat: req.body.cat,
-        status: req.body.status
+        status: req.body.status,
+        desc : req.body.desc
     })
     try {
         newReport.save().then((report) => {
