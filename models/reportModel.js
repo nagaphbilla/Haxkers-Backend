@@ -23,6 +23,10 @@ const ReportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    desc : {
+        type: String,
+        required: true,
+    },
     status:{
         type : String,
         default : "Pending",

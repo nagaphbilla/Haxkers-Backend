@@ -58,4 +58,9 @@ router.post("/newZone", auth, (req, res) => {
   }
 });
 
+router.get("/allZones", (req, res) => {
+  zoneModel.find()
+  .then((zones) => {res.status(200).json(zones)})
+})
+
 module.exports = router;

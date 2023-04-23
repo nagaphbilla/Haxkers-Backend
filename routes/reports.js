@@ -28,7 +28,7 @@ router.post("/newReport", auth, (req, res) => {
 
 
 //getting all reports of a user
-router.get("/uniReport", auth, (req, res) => {
+router.post("/uniReport", auth, (req, res) => {
     const id = req.body._id;
     try {
         reportModel.find({ _id : id }).then((data) => {
