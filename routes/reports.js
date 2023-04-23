@@ -5,7 +5,7 @@ const auth = require("../middleware/auth")
 
 //posting a report
 router.post("/newReport", auth, (req, res) => {
-    if (!req.body.userid || !req.body.location || !req.body.reporturl || !req.body.cat) {
+    if (!req.body.userid || !req.body.location || !req.body.reporturl || !req.body.cat || !req.body.desc) {
         return res.status(400).json({ message: "Not all fields have been filled" });
     }
     const newReport = new reportModel({
